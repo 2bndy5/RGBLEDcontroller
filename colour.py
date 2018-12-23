@@ -25,7 +25,7 @@ class colour:
             self.pv = self.intensity * (1 - self.sat)
             self.qv = self.intensity * (1 - self.sat * self.f)
             self.tv = self.intensity * (1 - self.sat * (1 - self.f))
-            if (self.temp_i <= 0): # red
+            if (self.temp_i <= 0 or self.temp_i >= 6): # red
                 self.red = max(0, min(255, round(self.intensity * 255)))
                 self.green = max(0, min(255, round(self.tv * 255)))
                 self.blue = max(0, min(255, round(self.pv * 255)))
@@ -55,9 +55,18 @@ class colour:
         self.hue = max(0, min(360, h))
         self.convert()
     def setI(self, i):
-        self.intensity = max(0.0, min(1.0, i))
+        if (i <= 0.0):
+            self.intensity = 0.0
+        elif (i >= 1.0):
+            self.intensity = 1.0
+        else: self.intensity = i
+        # self.intensity = max(0.0, min(1.0, i)) doesn't work well with floats
         self.convert()
     def setS(self, s):
-        self.sat = max(0.0, min(1.0, s))
+        if (s <= 0.0):
+            self.sat = 0.0
+        elif (s >= 1.0):
+            self.sat = 1.0
+        else: self.sat = s
         self.convert()
     

@@ -11,8 +11,8 @@ adc[1] = MCP3008(1)
 
 while True:
     try:
-        c.setH(round(adc[0].value / 1023.0 * 360))
-        c.setI(adc[1].value / 1023.0)
+        c.setH(round(adc[0].value * 360))
+        c.setI(adc[1].value)
         strip.color = (c.red / 255.0, c.green / 255.0, c.blue / 255.0)
     except KeyboardInterrupt:
         break
