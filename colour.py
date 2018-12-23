@@ -1,7 +1,7 @@
 from math import floor
 
 class colour:
-    def __init__(self, h = 0, s = 0, i = 0):
+    def __init__(self, h = 0, s = 1, i = 0):
         self.hue = h
         self.sat = s
         self.intensity = h

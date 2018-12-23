@@ -26,7 +26,7 @@ class ADC:
         # now delete handle
         self.pi.spi_close(self.adc)
         # return data from chip
-        return self.result[1][1] >> 8 | self.result[1][2]
+        return (self.result[1][1] << 8) | self.result[1][2]
     # end adc2
 
     def mcp3008(self, channel):
@@ -44,7 +44,7 @@ class ADC:
         # now delete handle
         self.pi.spi_close(self.adc)
         # return data from chip
-        return self.result[1][1] >> 8 | self.result[1][2]
+        return (self.result[1][1] << 8) | self.result[1][2]
 
     # end adc8
     
