@@ -10,6 +10,10 @@ while True:
     try:
         h = adc.mcp3008(0)
         i = adc.mcp3008(1)
+        if (h >= 1022):
+            c.setS(0.0)
+        else:
+            c.setS(1.0)
         c.setH(round(h / 1023.0 * 360))
         c.setI(i / 1023.0)
         #print("i_pot =", c.intensity, " h_pot =", c.hue, "\nRGB =", c.red, c.green, c.blue)
