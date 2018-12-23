@@ -20,13 +20,13 @@ class ADC:
         # gather data after sending data. *see spi_xfer(args)
         self.result = self.pi.spi_xfer(self.adc, [1, (2 + channel) << 6, 0])
         # for debug purposes
-        print(self.result)
-        for i in range(self.result[0]):
-            print(bin(self.result[1][i]), end = ' ')
+        # print(self.result)
+        # for i in range(self.result[0]):
+        #     print(bin(self.result[1][i]), end = ' ')
         # now delete handle
         self.pi.spi_close(self.adc)
         # return data from chip
-        return self.result[1]
+        return self.result[1][1] >> 8 | self.result[1][2]
     # end adc2
 
     def mcp3008(self, channel):
@@ -38,13 +38,14 @@ class ADC:
         # gather data after sending data. *see spi_xfer(args)
         self.result = self.pi.spi_xfer(self.adc, [1, (2 + channel) << 6, 0])
         # for debug purposes
-        print(self.result)
-        for i in range(self.result[0]):
-            print(bin(self.result[1][i]), end = ' ')
+        # print(self.result)
+        # for i in range(self.result[0]):
+        #     print(bin(self.result[1][i]), end = ' ')
         # now delete handle
         self.pi.spi_close(self.adc)
         # return data from chip
-        return self.result[1]
+        return self.result[1][1] >> 8 | self.result[1][2]
+
     # end adc8
     
     def __del__(self):

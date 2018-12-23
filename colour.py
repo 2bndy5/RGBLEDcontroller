@@ -71,11 +71,11 @@ class colour:
 
     def setH(self, h):
         self.hue = max(0, min(360, h))
-        convert()
+        self.convert()
     def setI(self, i):
         self.intensity = max(0.0, min(1.0, i))
-        convert()
-    def setS(slef, s):
+        self.convert()
+    def setS(self, s):
         self.sat = max(0.0, min(1.0, s))
-        convert()
+        self.convert()
     

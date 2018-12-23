@@ -9,7 +9,7 @@ adc = ADC(0)
 while True:
     try:
         c.setH(round(adc.mcp3008(0) / 1023.0 * 360))
-        c.setI(round(adc.mcp3008(1) / 1023.0))
+        c.setI(adc.mcp3008(1) / 1023.0)
         strip.color = (c.red / 255.0, c.green / 255.0, c.blue / 255.0)
     except KeyboardInterrupt:
         break
