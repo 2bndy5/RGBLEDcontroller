@@ -27,46 +27,28 @@ class colour:
             self.tv = self.intensity * (1 - self.sat * (1 - self.f))
             if (self.temp_i <= 0): # red
                 self.red = max(0, min(255, round(self.intensity * 255)))
-                #constrain((int)(255 * intensity), 0, 255)
                 self.green = max(0, min(255, round(self.tv * 255)))
-                # constrain((int)(255 * tv), 0, 255)
                 self.blue = max(0, min(255, round(self.pv * 255)))
-                # constrain((int)(255 * pv), 0, 255)
             elif (self.temp_i == 1):# green
                 self.red = max(0, min(255, round(self.qv * 255)))
-                # constrain((int)(255 * qv), 0, 255)
                 self.green = max(0, min(255, round(self.intensity * 255)))
-                # constrain((int)(255 * intensity), 0, 255)
                 self.blue = max(0, min(255, round(self.pv * 255)))
-                # constrain((int)(255 * pv), 0, 255)
             elif (self.temp_i == 2):
                 self.red = max(0, min(255, round(self.pv * 255)))
-                # constrain((int)(255 * pv), 0, 255)
                 self.green = max(0, min(255, round(self.intensity * 255)))
-                # constrain((int)(255 * intensity), 0, 255)
                 self.blue = max(0, min(255, round(self.tv * 255)))
-                # constrain((int)(255 * tv), 0, 255)
             elif (self.temp_i == 3): # blue
                 self.red = max(0, min(255, round(self.pv * 255)))
-                # constrain((int)(255 * pv), 0, 255)
                 self.green = max(0, min(255, round(self.qv * 255)))
-                # constrain((int)(255 * qv), 0, 255)
                 self.blue = max(0, min(255, round(self.intensity * 255)))
-                # constrain((int)(255 * intensity), 0, 255)
             elif (self.temp_i == 4):
                 self.red = max(0, min(255, round(self.tv * 255)))
-                # constrain((int)(255 * tv), 0, 255)
                 self.green = max(0, min(255, round(self.pv * 255)))
-                # constrain((int)(255 * pv), 0, 255)
                 self.blue = max(0, min(255, round(self.intensity * 255)))
-                # constrain((int)(255 * intensity), 0, 255)
             elif (self.temp_i >= 5):
                 self.red = max(0, min(255, round(self.intensity * 255)))
-                # constrain((int)(255 * intensity), 0, 255)
                 self.green = max(0, min(255, round(self.pv * 255)))
-                # constrain((int)(255 * pv), 0, 255)
                 self.blue = max(0, min(255, round(self.qv * 255)))
-                # constrain((int)(255 * qv), 0, 255)
     # end convert() HSI to RGB
 
     def setH(self, h):
