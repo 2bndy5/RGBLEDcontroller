@@ -79,13 +79,13 @@ while connected:
 
         #client.publish(topic, "#" + "{:02X}".format(round(rgb[0] * 255)) + "{:02X}".format(round(rgb[1] * 255)) + "{:02X}".format(round(rgb[2] * 255)))
 
-        time.sleep(0.5)
+        #time.sleep(0.5)
         client.loop_stop()
         strip.color = (rgb[0], rgb[1], rgb[2])
-        print("RGB =", rgb[0], rgb[1], rgb[2])
+        #print("RGB =", rgb[0], rgb[1], rgb[2])
     except KeyboardInterrupt:
         client.disconnect()
         client.loop_stop()
         break
-    time.sleep(0.5)
+    #time.sleep(0.5)
 #end infinite loop
