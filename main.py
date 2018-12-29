@@ -4,11 +4,15 @@ from gpiozero import RGBLED
 import paho.mqtt.client as mqtt
 import colorsys
 import time
+from math import floor
+
+rgb = (0, 0, 0)
 
 broker="B-Pi3"
 topic = "test/led"
 client = mqtt.Client(client_id="")
-rgb = (0, 0, 0)
+isListening = False
+offTime = 0
 
 def hollaBroker():
     try:
@@ -30,7 +34,7 @@ def on_message(client, userdata, message):
     red = 0
     green = 0
     blue = 0
-    if (msg.find("#") == 0):
+    if (msg.find("#") == 0): # using html hexadecimal notation
         if (len(msg) == 4):
             red = int(msg[1] + msg[1], 16)
             green = int(msg[2] + msg[2], 16)
@@ -39,18 +43,32 @@ def on_message(client, userdata, message):
             red = int(msg[1] + msg[2], 16)
             green = int(msg[3] + msg[4], 16)
             blue = int(msg[5] + msg[6], 16)
-    elif (msg.find(",") > 0):
+    elif (msg.find(",") > 0): # using R,G,B notation
         e1 = msg.find(",")
         red = int(msg[: e1])
         e2 = msg.find(",", e1 + 1)
         green = int(msg[e1 + 1 : e2])
         blue = int(msg[e2 + 1 :])
         del e1, e2
+    elif (msg.find(".") > 0): # using Hue Sat Val float values
+        e1 = msg.find(" ")
+        red = float(msg[: e1]) # used as Hue
+        e2 = msg.find(" ", e1 + 1)
+        green = float(msg[e1 + 1 : e2])# used as Saturaion
+        blue = float(msg[e2 + 1 :])# used as Intensity (AKA Value or Lumens)
+        del e1, e2
+        # now get actual RGB from HSV values using colorsys function
+        newC = colorsys.hsv_to_rgb(red, green, blue)
+        red = newC[0] * 255.0
+        green = newC[1] * 255.0
+        blue = newC[2] * 255.0
+        del newC
+
     print(red, green, blue, sep=",")
     red = float(red / 255.0)
     green = float(green / 255.0)
     blue = float(blue / 255.0)
-    global rgb
+    global rgb # needed to merge data into stream
     rgb = (red, green, blue)
     del red, green, blue
     
@@ -72,20 +90,20 @@ def applyPots():
         sat = 1.0
     if (abs(hPot - last_hPot) > 2 or abs(iPot - last_iPot) > 2):
         rgb = colorsys.hsv_to_rgb(hPot / 1023.0, sat, iPot / 1023.0)
+        #client.publish(topic, "#" + "{:02X}".format(round(rgb[0] * 255)) + "{:02X}".format(round(rgb[1] * 255)) + "{:02X}".format(round(rgb[2] * 255)))
         last_hPot = hPot
         last_iPot = iPot
-        #client.publish(topic, "#" + "{:02X}".format(round(rgb[0] * 255)) + "{:02X}".format(round(rgb[1] * 255)) + "{:02X}".format(round(rgb[2] * 255)))
-
-def listenClient():
-    client.loop_start()
-    time.sleep(0.25)
-    client.loop_stop()
 
 while connected:
     try:
-        listenClient()
+        sec = time.time()
+        if (floor(sec) % 2 == 0):
+            client.loop_start()
+            isListening = True
+            offTime = sec + 0.5
+        elif (sec >= offTime and isListening): client.loop_stop()
         applyPots()
-        strip.color = (rgb[0], rgb[1], rgb[2])
+        strip.color = rgb
         #print("RGB =", rgb[0], rgb[1], rgb[2])
     except KeyboardInterrupt:
         client.disconnect()
