@@ -62,25 +62,29 @@ last_hPot = 0
 last_iPot = 0
 connected = hollaBroker()
 
-while connected:
-    try:
-        client.loop_start()
-        hPot = adc.mcp3008(0)
-        iPot = adc.mcp3008(1)
-        sat =  0.0
-        if (hPot >= 1022):
-            sat = 0.0
-        else:
-            sat = 1.0
-        if (abs(hPot - last_hPot) > 2 or abs(iPot - last_iPot) > 2):
-            rgb = colorsys.hsv_to_rgb(hPot / 1023.0, sat, iPot / 1023.0)
-            last_hPot = hPot
-            last_iPot = iPot
-
+def applyPots():
+    hPot = adc.mcp3008(0)
+    iPot = adc.mcp3008(1)
+    sat =  0.0
+    if (hPot >= 1022):
+        sat = 0.0
+    else:
+        sat = 1.0
+    if (abs(hPot - last_hPot) > 2 or abs(iPot - last_iPot) > 2):
+        rgb = colorsys.hsv_to_rgb(hPot / 1023.0, sat, iPot / 1023.0)
+        last_hPot = hPot
+        last_iPot = iPot
         #client.publish(topic, "#" + "{:02X}".format(round(rgb[0] * 255)) + "{:02X}".format(round(rgb[1] * 255)) + "{:02X}".format(round(rgb[2] * 255)))
 
-        time.sleep(0.25)
-        client.loop_stop()
+def listenClient():
+    client.loop_start()
+    time.sleep(0.25)
+    client.loop_stop()
+
+while connected:
+    try:
+        listenClient()
+        applyPots()
         strip.color = (rgb[0], rgb[1], rgb[2])
         #print("RGB =", rgb[0], rgb[1], rgb[2])
     except KeyboardInterrupt:
@@ -88,4 +92,6 @@ while connected:
         client.loop_stop()
         break
     #time.sleep(0.5)
-#end infinite loop
+#end client connected loop
+
+
