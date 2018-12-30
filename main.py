@@ -4,7 +4,7 @@ from gpiozero import RGBLED
 import paho.mqtt.client as mqtt
 import colorsys
 import time
-from math import floor
+from math import floor, abs
 
 rgb = (0, 0, 0)
 
@@ -83,6 +83,7 @@ connected = hollaBroker()
 def applyPots():
     hPot = adc.mcp3008(0)
     iPot = adc.mcp3008(1)
+    global last_hPot, last_iPot
     sat =  0.0
     if (hPot >= 1022):
         sat = 0.0
