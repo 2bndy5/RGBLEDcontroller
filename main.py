@@ -83,7 +83,7 @@ connected = hollaBroker()
 def applyPots():
     hPot = adc.mcp3008(0)
     iPot = adc.mcp3008(1)
-    global last_hPot, last_iPot
+    global last_hPot, last_iPot, rgb
     sat =  0.0
     if (hPot >= 1022):
         sat = 0.0
