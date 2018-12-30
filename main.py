@@ -4,7 +4,7 @@ from gpiozero import RGBLED
 import paho.mqtt.client as mqtt
 import colorsys
 import time
-from math import floor, abs
+from math import floor
 
 rgb = (0, 0, 0)
 
