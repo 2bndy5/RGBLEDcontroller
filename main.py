@@ -55,7 +55,7 @@ def on_message(client, userdata, message):
         red = float(msg[: e1]) # used as Hue
         e2 = msg.find(" ", e1 + 1)
         green = float(msg[e1 + 1 : e2])# used as Saturaion
-        blue = float(msg[e2 + 1 :])# used as Intensity (AKA Value or Lumens)
+        blue = float(msg[e2 + 1 :])# used as Intensity (AKA Value/Lumens)
         del e1, e2
         # now get actual RGB from HSV values using colorsys function
         newC = colorsys.hsv_to_rgb(red, green, blue)
