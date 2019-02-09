@@ -1,5 +1,4 @@
 from mcp300x import ADC
-# from colour import colour
 from gpiozero import RGBLED
 import paho.mqtt.client as mqtt
 import colorsys
@@ -74,26 +73,27 @@ def on_message(client, userdata, message):
     
 client.on_message = on_message
 
-strip = RGBLED(13, 6, 5)
-adc = ADC(0)
-last_hPot = 0
-last_iPot = 0
-connected = hollaBroker()
+strip = RGBLED(13, 6, 5)    # define GPIO pins for led
+adc = ADC(0)                # define ChipSelect (CS or CE) for accessing MCP3008
+last_hPot = 0               # default hue pot data to 0
+last_iPot = 0               # default intensity pot data to 0
+connected = hollaBroker()   # is broker found
 
 def applyPots():
     hPot = adc.mcp3008(0)
     iPot = adc.mcp3008(1)
-    global last_hPot, last_iPot, rgb
+    # global last_hPot, last_iPot, rgb
     sat =  0.0
     if (hPot >= 1022):
         sat = 0.0
     else:
         sat = 1.0
     if (abs(hPot - last_hPot) > 2 or abs(iPot - last_iPot) > 2):
-        rgb = colorsys.hsv_to_rgb(hPot / 1023.0, sat, iPot / 1023.0)
-        #client.publish(topic, "#" + "{:02X}".format(round(rgb[0] * 255)) + "{:02X}".format(round(rgb[1] * 255)) + "{:02X}".format(round(rgb[2] * 255)))
+        temp = colorsys.hsv_to_rgb(hPot / 1023.0, sat, iPot / 1023.0)
+        client.publish(topic, "#" + "{:02X}".format(round(temp[0] * 255)) + "{:02X}".format(round(temp[1] * 255)) + "{:02X}".format(round(temp[2] * 255)))
         last_hPot = hPot
         last_iPot = iPot
+        del temp
 
 while connected:
     try:
@@ -101,8 +101,9 @@ while connected:
         if (floor(sec) % 2 == 0):
             client.loop_start()
             isListening = True
-            offTime = sec + 0.5
-        elif (sec >= offTime and isListening): client.loop_stop()
+            offTime = sec + 1.5
+        elif (sec >= offTime and isListening): 
+            client.loop_stop()
         applyPots()
         strip.color = rgb
         #print("RGB =", rgb[0], rgb[1], rgb[2])
@@ -112,5 +113,3 @@ while connected:
         break
     #time.sleep(0.5)
 #end client connected loop
-
-
