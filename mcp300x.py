@@ -55,4 +55,4 @@ class ADC:
 if __name__ == "__main__":
     adc = ADC(0)
     print('h =', adc.mcp3008(1))
-    print('h =', adc.mcp3008(2))
+    print('i =', adc.mcp3008(2))
