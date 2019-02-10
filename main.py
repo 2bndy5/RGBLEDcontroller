@@ -84,7 +84,7 @@ def applyPots():
     iPot = adc.mcp3008(1)
     # global last_hPot, last_iPot, rgb
     sat =  0.0
-    if (hPot >= 1021):
+    if (hPot >= 1022):
         sat = 0.0
     else:
         sat = 1.0
