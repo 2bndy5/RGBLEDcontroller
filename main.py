@@ -84,12 +84,13 @@ def applyPots():
     iPot = adc.mcp3008(1)
     global last_hPot, last_iPot
     sat =  0.0
-    if (hPot >= 1022):
+    if (hPot >= 1021):
         sat = 0.0
     else:
         sat = 1.0
     if (abs(hPot - last_hPot) > 2 or abs(iPot - last_iPot) > 2):
         print('h =', hPot, '\ni =', iPot)
+        print('prev_h =', hPot, '\nprev_i =', iPot)
         temp = hsv_to_rgb(hPot / 1023.0, sat, iPot / 1023.0)
         client.publish(topic, repr(round(temp[0] * 255)) + "," + repr(round(temp[1] * 255)) + "," + repr(round(temp[2] * 255)))
         last_hPot = hPot
