@@ -15,7 +15,7 @@ class ADC:
         self.adc = self.pi.spi_open(self.cs, 50000)
         # gather data after sending data. *see spi_xfer(args)
         # binary data output format = 1(channel in 1 bit)0
-        result = self.pi.spi_xfer(self.adc, [1, (channel << 1), 0])
+        result = self.pi.spi_xfer(self.adc, [1, channel, 0])
         # now delete handle
         self.pi.spi_close(self.adc)
         # return data from chip
@@ -28,7 +28,7 @@ class ADC:
         self.adc = self.pi.spi_open(self.cs, 50000)
         # gather data after sending data. *see spi_xfer(args)
         # binary data output format = 1(channel in 3 bits)0
-        result = self.pi.spi_xfer(self.adc, [1, (channel << 1), 0])
+        result = self.pi.spi_xfer(self.adc, [1, channel, 0])
         # now delete handle
         self.pi.spi_close(self.adc)
         # return data from chip
@@ -41,7 +41,7 @@ class ADC:
         self.adc = self.pi.spi_open(self.cs, 50000)
         # gather data after sending data. *see spi_xfer(args)
         # binary data output format = 1(channel in 3 bits)0
-        result = self.pi.spi_xfer(self.adc, [1, (channel << 1), 0])
+        result = self.pi.spi_xfer(self.adc, [1, channel, 0])
         # now delete handle
         self.pi.spi_close(self.adc)
         # return data from chip
