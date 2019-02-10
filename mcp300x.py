@@ -54,5 +54,11 @@ class ADC:
 
 if __name__ == "__main__":
     adc = ADC(0)
-    print('h =', adc.mcp3008(1))
-    print('i =', adc.mcp3008(2))
+    print('channel 1 =', adc.mcp3008(0))
+    print('channel 2 =', adc.mcp3008(1))
+    print('channel 3 =', adc.mcp3008(2))
+    print('channel 4 =', adc.mcp3008(3))
+    print('channel 5 =', adc.mcp3008(4))
+    print('channel 6 =', adc.mcp3008(5))
+    print('channel 7 =', adc.mcp3008(6))
+    print('channel 8 =', adc.mcp3008(7))
