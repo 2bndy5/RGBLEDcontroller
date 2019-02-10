@@ -51,3 +51,8 @@ class ADC:
         self.pi.stop()
         del self.pi, self.cs, result
 # end class ADC
+
+if __name__ == "__main__":
+    adc = ADC(0)
+    print('h =', adc.mcp3008(1))
+    print('h =', adc.mcp3008(2))
