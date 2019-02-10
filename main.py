@@ -89,8 +89,7 @@ def applyPots():
     else:
         sat = 1.0
     if (abs(hPot - last_hPot) > 2 or abs(iPot - last_iPot) > 2):
-        print('h =', hPot, '\ni =', iPot)
-        print('prev_h =', hPot, '\nprev_i =', iPot)
+        print('h_diff =', hPot , '-', last_hPot, '\ni_diff =', iPot, '-', last_iPot)
         temp = hsv_to_rgb(hPot / 1023.0, sat, iPot / 1023.0)
         client.publish(topic, repr(round(temp[0] * 255)) + "," + repr(round(temp[1] * 255)) + "," + repr(round(temp[2] * 255)))
         last_hPot = hPot
