@@ -26,7 +26,7 @@ def hollaBroker():
 
 def on_message(client, userdata, message):
     msg = str(message.payload.decode("utf-8"))
-    print("message received " , msg)
+    # print("message received " , msg)
     # print("message topic=",message.topic)
     # print("message qos=",message.qos)
     # print("message retain flag=",message.retain)
@@ -63,7 +63,7 @@ def on_message(client, userdata, message):
         blue = newC[2] * 255.0
         del newC
 
-    print(red, green, blue, sep=",")
+    # print(red, green, blue, sep=",")
     red = float(red / 255.0)
     green = float(green / 255.0)
     blue = float(blue / 255.0)
