@@ -1,7 +1,7 @@
 from mcp300x import ADC
 from gpiozero import RGBLED
 import paho.mqtt.client as mqtt
-import colorsys
+from colorsys import hsv_to_rgb, rgb_to_hsv
 import time
 from math import floor
 
@@ -33,31 +33,31 @@ def on_message(client, userdata, message):
     red = 0
     green = 0
     blue = 0
-    if (msg.find("#") == 0): # using html hexadecimal notation
-        if (len(msg) == 4):
+    if (msg.find("#") == 0):    # using html hexadecimal notation
+        if (len(msg) == 4):     # using shorthand hex '#fff'
             red = int(msg[1] + msg[1], 16)
             green = int(msg[2] + msg[2], 16)
             blue = int(msg[3] + msg[3], 16)
-        else:
+        else:                   # using standard hex '#ffffff'
             red = int(msg[1] + msg[2], 16)
             green = int(msg[3] + msg[4], 16)
             blue = int(msg[5] + msg[6], 16)
-    elif (msg.find(",") > 0): # using R,G,B notation
+    elif (msg.find(",") > 0):   # using 'R,G,B' notation
         e1 = msg.find(",")
         red = int(msg[: e1])
         e2 = msg.find(",", e1 + 1)
         green = int(msg[e1 + 1 : e2])
         blue = int(msg[e2 + 1 :])
         del e1, e2
-    elif (msg.find(".") > 0): # using Hue Sat Val float values
+    elif (msg.find(".") > 0):   # using 'Hue Sat Val' float values
         e1 = msg.find(" ")
-        red = float(msg[: e1]) # used as Hue
+        red = float(msg[: e1])              # used as Hue
         e2 = msg.find(" ", e1 + 1)
-        green = float(msg[e1 + 1 : e2])# used as Saturaion
-        blue = float(msg[e2 + 1 :])# used as Intensity (AKA Value/Lumens)
+        green = float(msg[e1 + 1 : e2])     # used as Saturaion
+        blue = float(msg[e2 + 1 :])         # used as Intensity (AKA Value/Lumens)
         del e1, e2
         # now get actual RGB from HSV values using colorsys function
-        newC = colorsys.hsv_to_rgb(red, green, blue)
+        newC = hsv_to_rgb(red, green, blue)
         red = newC[0] * 255.0
         green = newC[1] * 255.0
         blue = newC[2] * 255.0
@@ -67,7 +67,7 @@ def on_message(client, userdata, message):
     red = float(red / 255.0)
     green = float(green / 255.0)
     blue = float(blue / 255.0)
-    global rgb # needed to merge data into stream
+    global rgb              # needed to merge data into stream
     rgb = (red, green, blue)
     del red, green, blue
     
@@ -84,12 +84,12 @@ def applyPots():
     iPot = adc.mcp3008(1)
     # global last_hPot, last_iPot, rgb
     sat =  0.0
-    if (hPot >= 1022):
+    if (hPot >= 1021):
         sat = 0.0
     else:
         sat = 1.0
     if (abs(hPot - last_hPot) > 2 or abs(iPot - last_iPot) > 2):
-        temp = colorsys.hsv_to_rgb(hPot / 1023.0, sat, iPot / 1023.0)
+        temp = hsv_to_rgb(hPot / 1023.0, sat, iPot / 1023.0)
         client.publish(topic, "#" + "{:02X}".format(round(temp[0] * 255)) + "{:02X}".format(round(temp[1] * 255)) + "{:02X}".format(round(temp[2] * 255)))
         last_hPot = hPot
         last_iPot = iPot
