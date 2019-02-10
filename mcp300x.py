@@ -49,7 +49,7 @@ class ADC:
     
     def __del__(self):
         self.pi.stop()
-        del self.pi, self.cs, result
+        del self.pi, self.cs
 # end class ADC
 
 if __name__ == "__main__":
