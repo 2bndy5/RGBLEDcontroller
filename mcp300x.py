@@ -72,8 +72,8 @@ class ADC:
         return (result[1][1] << 8) | result[1][2]
     
     def __del__(self):
-        spi.close() # in case of KeyboardInterrupt
-        del self.cs
+        self.spi.close() # in case of KeyboardInterrupt
+        del self.cs, self.spi
 # end class ADC
 
 if __name__ == "__main__":
