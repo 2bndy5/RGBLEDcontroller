@@ -5,6 +5,7 @@ class ADC:
     """
     class for gathering data from MCP300x IC via SPI
     """
+    bus = 0 # default is 0, but can be 1 if user enabled second bus
     def __init__(self, CS):
         self.cs = max(0, min(1, CS))
         GPIO.setmode(GPIO.BCM)
@@ -15,7 +16,6 @@ class ADC:
         GPIO.setup(8 - self.cs, GPIO.OUT)   # CS pin (CE0 | CE1) -> CE == 0 ? 8 : 7
         # create object for handling SPI interface with spidev
         self.spi = spidev.SpiDev()
-        bus = 0 # default is 0, but can be 1 if user enabled second bus
 
     def mcp3002(self, channel):
         # check proper range for analog channel (0 or 1 on MCP3002)
