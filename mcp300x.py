@@ -35,7 +35,7 @@ class ADC:
         # gather data after sending data. *see spi_xfer2(args)
         # data output format = [1, (channel in 3 bits shifted to 8 bit length), 0]
         result = self.spi.xfer2([1, (8 + channel) << 4, 0], 50000)
-        print('result =', result)
+        # print('result =', result)
         # return data from chip (last 10 bits of resulting bytearray)
         return ((result[1] & 3) << 8) + result[2]
     
