@@ -7,7 +7,8 @@ class ADC:
     """
     def __init__(self, CS):
         self.cs = max(0, min(1, CS))
-        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BOARD)
         # set up the SPI interface pins
         GPIO.setup(10, GPIO.OUT)            # MOSI pin
         GPIO.setup(9, GPIO.IN)              # MISO pin
@@ -61,12 +62,12 @@ class ADC:
         # set CLK speed to 50kHz according to datasheet
         self.spi.max_speed_hz = 50000
         # spidev docs mandate CS pin pulled low during xfer2() and then high afterward
-        GPIO.output(8 - self.cs, True)
+        GPIO.output(8 - self.cs, False)
         # gather data after sending data. *see spi_xfer2(args)
         # data output format = [1, (channel in 3 bits shifted to 8 bit length), 0]
         result = self.spi.xfer2([1, (8 + channel) << 4, 0])
         print('result =', result)
-        GPIO.output(8 - self.cs, False)
+        GPIO.output(8 - self.cs, True)
         # now delete handle
         self.spi.close()
         # return data from chip (last 10 bits of resulting bytearray)
