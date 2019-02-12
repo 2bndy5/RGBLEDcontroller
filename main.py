@@ -21,7 +21,7 @@ def hollaBroker():
         return False
     finally:
         client.subscribe(topic, qos=2)
-        print("**Connected to ", broker, " and subscribed to \"", topic, "\"", sep='')
+        print("**Connected to", broker, "and subscribed to", topic)
         return True
 
 def on_message(client, userdata, message):
