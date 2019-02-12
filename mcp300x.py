@@ -7,7 +7,7 @@ class ADC:
     """
     def __init__(self, CS):
         self.cs = max(0, min(1, CS))
-        GPIO.setwarnings(False)
+        # GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         # set up the SPI interface pins
         GPIO.setup(10, GPIO.OUT)            # MOSI pin
@@ -23,30 +23,26 @@ class ADC:
         channel = max(0, min(1, channel))
         # open a handle to the SPI bus using the CS
         self.spi.open(self.bus, self.cs)
-        # set CLK speed to 50kHz according to datasheet
-        self.spi.max_speed_hz = 50000
         # gather data after sending data. *see spi_xfer2(args)
         # data output format = [1, (channel in 1 bits shifted to 8 bit length), 0]
         result = self.spi.xfer2([1, (2 + channel) << 6, 0])
         # now delete handle
         self.spi.close()
         # return data from chip (last 10 bits of resulting bytearray)
-        return (result[1][1] << 8) | result[1][2]
+        return ((result[1] & 3) << 8) + result[2]
 
     def mcp3004(self, channel):
         # check proper range for analog channel (0 to 3 on MCP3004)
         channel = max(0, min(3, channel))
         # open a handle to the SPI bus using the CS
         self.spi.open(self.bus, self.cs)
-        # set CLK speed to 50kHz according to datasheet
-        self.spi.max_speed_hz = 50000
         # gather data after sending data. *see spi_xfer2(args)
         # data output format = [1, (channel in 3 bits shifted to 8 bit length), 0]
         result = self.spi.xfer2([1, (8 + channel) << 4, 0])
         # now delete handle
         self.spi.close()
         # return data from chip (last 10 bits of resulting bytearray)
-        return (result[1][1] << 8) | result[1][2]
+        return ((result[1] & 3) << 8) + result[2]
     
     def mcp3008(self, channel):
         # check proper range for analog channel (0 to 7 on MCP3008)
