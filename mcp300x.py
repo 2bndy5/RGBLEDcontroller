@@ -65,6 +65,7 @@ class ADC:
         # gather data after sending data. *see spi_xfer2(args)
         # data output format = [1, (channel in 3 bits shifted to 8 bit length), 0]
         result = self.spi.xfer2([1, (8 + channel) << 4, 0])
+        print('result =', result)
         GPIO.output(8 - self.cs, True)
         # now delete handle
         self.spi.close()
