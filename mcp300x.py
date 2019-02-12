@@ -70,7 +70,7 @@ class ADC:
         # now delete handle
         self.spi.close()
         # return data from chip (last 10 bits of resulting bytearray)
-        return (result[1][1] << 8) | result[1][2]
+        return (result[1] << 8) | result[2]
     
     def __del__(self):
         self.spi.close() # in case of KeyboardInterrupt
