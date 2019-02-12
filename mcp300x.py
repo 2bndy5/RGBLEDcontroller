@@ -25,12 +25,9 @@ class ADC:
         self.spi.open(self.bus, self.cs)
         # set CLK speed to 50kHz according to datasheet
         self.spi.max_speed_hz = 50000
-        # spidev docs mandate CS pin pulled low during xfer2() and then high afterward
-        GPIO.output((8 - self.cs), False)
         # gather data after sending data. *see spi_xfer2(args)
         # data output format = [1, (channel in 1 bits shifted to 8 bit length), 0]
         result = self.spi.xfer2([1, (2 + channel) << 6, 0])
-        GPIO.output((8 - self.cs), True)
         # now delete handle
         self.spi.close()
         # return data from chip (last 10 bits of resulting bytearray)
@@ -43,12 +40,9 @@ class ADC:
         self.spi.open(self.bus, self.cs)
         # set CLK speed to 50kHz according to datasheet
         self.spi.max_speed_hz = 50000
-        # spidev docs mandate CS pin pulled low during xfer2() and then high afterward
-        GPIO.output((8 - self.cs), False)
         # gather data after sending data. *see spi_xfer2(args)
         # data output format = [1, (channel in 3 bits shifted to 8 bit length), 0]
         result = self.spi.xfer2([1, (8 + channel) << 4, 0])
-        GPIO.output((8 - self.cs), True)
         # now delete handle
         self.spi.close()
         # return data from chip (last 10 bits of resulting bytearray)
@@ -61,7 +55,7 @@ class ADC:
         self.spi.open(self.bus, self.cs)
         # gather data after sending data. *see spi_xfer2(args)
         # data output format = [1, (channel in 3 bits shifted to 8 bit length), 0]
-        result = self.spi.xfer([1, (8 + channel) << 4, 0], 50000)
+        result = self.spi.xfer2([1, (8 + channel) << 4, 0], 50000)
         print('result =', result)
         # now delete handle
         self.spi.close()
