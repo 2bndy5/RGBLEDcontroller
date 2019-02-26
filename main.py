@@ -82,7 +82,7 @@ connected = hollaBroker()   # is broker found
 def applyPots(hue, val):
     # global hPot, iPot
     sat =  0.0
-    if (tempH > 1020):
+    if (hue > 1020):
         sat = 0.0
     else:
         sat = 1.0
