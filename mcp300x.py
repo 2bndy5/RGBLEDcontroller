@@ -18,7 +18,7 @@ class ADC:
         self.result = self.pi.spi_xfer(self.adc, [1, (2 + channel) << 6, 0])
         if debug: printRawResult(self.result)
         # return data from chip
-        return ((int(self.result[1]) & 3) << 8) + int(self.result[2])
+        return (self.result[1][1] & 3) << 8) + self.result[1][2]
     # end read mcp3002
 
     def mcp3004(self, channel, debug = False):
@@ -28,7 +28,7 @@ class ADC:
         self.result = self.pi.spi_xfer(self.adc, [1, (8 + channel) << 4, 0])
         if debug: printRawResult(self.result)
         # return data from chip
-        return ((int(self.result[1]) & 3) << 8) + int(self.result[2])
+        return (self.result[1][1] & 3) << 8) + self.result[1][2]
     # end mcp3008
 
     def mcp3008(self, channel, debug = False):
@@ -38,7 +38,7 @@ class ADC:
         self.result = self.pi.spi_xfer(self.adc, [1, (8 + channel) << 4, 0])
         if debug: printRawResult(self.result)
         # return data from chip
-        return ((int(self.result[1]) & 3) << 8) + int(self.result[2])
+        return (self.result[1][1] & 3) << 8) + self.result[1][2]
     # end mcp3008
 
     def printRawResult(self, r):
@@ -59,11 +59,12 @@ class ADC:
 # for testing. Adjust to suit your IC model (e.g. mcp3008 vs mcp3002)
 if __name__ == "__main__":
     adc = ADC(0)
-    print('channel 1 =', adc.mcp3008(0))
-    print('channel 2 =', adc.mcp3008(1))
-    print('channel 3 =', adc.mcp3008(2))
-    print('channel 4 =', adc.mcp3008(3))
-    print('channel 5 =', adc.mcp3008(4))
-    print('channel 6 =', adc.mcp3008(5))
-    print('channel 7 =', adc.mcp3008(6))
-    print('channel 8 =', adc.mcp3008(7))
+    print('channel 1 =', adc.mcp3008(0, debug = True))
+    print('channel 2 =', adc.mcp3008(1, debug = True))
+    print('channel 3 =', adc.mcp3008(2, debug = True))
+    print('channel 4 =', adc.mcp3008(3, debug = True))
+    print('channel 5 =', adc.mcp3008(4, debug = True))
+    print('channel 6 =', adc.mcp3008(5, debug = True))
+    print('channel 7 =', adc.mcp3008(6, debug = True))
+    print('channel 8 =', adc.mcp3008(7, debug = True))
+    del adc
