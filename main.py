@@ -79,19 +79,17 @@ hPot = MCP3008(channel=0)   # create hue pot object
 iPot = MCP3008(channel=1)   # create intensity pot object
 connected = hollaBroker()   # is broker found
 
-def applyPots():
+def applyPots(hue, val):
     # global hPot, iPot
-    tempH = hPot.value
-    tempI = iPot.value
     sat =  0.0
     if (tempH > 1020):
         sat = 0.0
     else:
         sat = 1.0
-    print('h =', tempH , '\ni =', tempI)
-    tempC = hsv_to_rgb(tempH, sat, tempI)
+    print('h =', hue, '\ni =', val)
+    tempC = hsv_to_rgb(hue, sat, val)
     client.publish(topic, repr(round(tempC[0] * 255)) + "," + repr(round(tempC[1] * 255)) + "," + repr(round(tempC[2] * 255)))
-    del tempC, tempH, tempI
+    del tempC
 
 while connected:
     try:
@@ -102,7 +100,7 @@ while connected:
             offTime = sec + 1.5
         elif (sec >= offTime and isListening): 
             client.loop_stop()
-        applyPots()
+        applyPots(hPot.value, iPot.value)
         strip.color = rgb
         #print("RGB =", rgb[0], rgb[1], rgb[2])
     except KeyboardInterrupt:
