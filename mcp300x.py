@@ -18,7 +18,7 @@ class ADC:
         self.result = self.pi.spi_xfer(self.adc, [1, (2 + channel) << 6, 0])
         if debug: printRawResult(self.result)
         # return data from chip
-        return ((self.result[1] & 3) << 8) + self.result[2]
+        return ((int(self.result[1]) & 3) << 8) + int(self.result[2])
     # end read mcp3002
 
     def mcp3004(self, channel, debug = False):
@@ -28,7 +28,7 @@ class ADC:
         self.result = self.pi.spi_xfer(self.adc, [1, (8 + channel) << 4, 0])
         if debug: printRawResult(self.result)
         # return data from chip
-        return ((self.result[1] & 3) << 8) + self.result[2]
+        return ((int(self.result[1]) & 3) << 8) + int(self.result[2])
     # end mcp3008
 
     def mcp3008(self, channel, debug = False):
@@ -38,7 +38,7 @@ class ADC:
         self.result = self.pi.spi_xfer(self.adc, [1, (8 + channel) << 4, 0])
         if debug: printRawResult(self.result)
         # return data from chip
-        return ((self.result[1] & 3) << 8) + self.result[2]
+        return ((int(self.result[1]) & 3) << 8) + int(self.result[2])
     # end mcp3008
 
     def printRawResult(self, r):
@@ -51,7 +51,7 @@ class ADC:
         println() # finish debug output with '\n'
 
     def __del__(self):
-        self.pi.spi_close()
+        self.pi.spi_close(self.adc)
         self.pi.stop()
         del pi
 # end class ADC
