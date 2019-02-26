@@ -75,8 +75,8 @@ def on_message(client, userdata, message):
 client.on_message = on_message
 
 strip = RGBLED(13, 6, 5)    # define GPIO pins for led
-hPot = MCP3008(channel=0)   # default hue pot data to 0
-iPot = MCP3008(channel=1)   # default intensity pot data to 0
+hPot = MCP3008(0)   # create hue pot object
+iPot = MCP3008(1)   # create intensity pot object
 connected = hollaBroker()   # is broker found
 
 def applyPots():
@@ -89,7 +89,7 @@ def applyPots():
     else:
         sat = 1.0
     print('h =', tempH , '\ni =', tempI)
-    tempC = hsv_to_rgb(tempH / 1023.0, sat, tempI / 1023.0)
+    tempC = hsv_to_rgb(tempH, sat, tempI)
     client.publish(topic, repr(round(tempC[0] * 255)) + "," + repr(round(tempC[1] * 255)) + "," + repr(round(tempC[2] * 255)))
     del tempC, tempH, tempI
 
