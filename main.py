@@ -75,7 +75,6 @@ def on_message(client, userdata, message):
 client.on_message = on_message
 
 strip = RGBLED(13, 6, 5)    # define GPIO pins for led
-adc = ADC(0)                # define ChipSelect (CS or CE) for accessing MCP3008
 hPot = MCP3008(channel=0)   # default hue pot data to 0
 iPot = MCP3008(channel=1)   # default intensity pot data to 0
 connected = hollaBroker()   # is broker found
