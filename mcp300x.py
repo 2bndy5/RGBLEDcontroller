@@ -45,7 +45,7 @@ class ADC:
         '''
         for debug purposes
         '''
-        print(r[0], 'bytes =')
+        print(r[0], 'bytes =', end = ' ')
         for i in range(r[0]):
             print(bin(r[1][i]), end = ' ')
         print() # finish debug output with '\n'
