@@ -2,10 +2,9 @@ import time
 from colorsys import hsv_to_rgb, rgb_to_hsv
 from math import floor
 
-from gpiozero import RGBLED
+from gpiozero import RGBLED, MCP3008
 
 import paho.mqtt.client as mqtt
-from mcp300x import ADC
 
 rgb = (0, 0, 0)
 
@@ -77,26 +76,23 @@ client.on_message = on_message
 
 strip = RGBLED(13, 6, 5)    # define GPIO pins for led
 adc = ADC(0)                # define ChipSelect (CS or CE) for accessing MCP3008
-last_hPot = 0               # default hue pot data to 0
-last_iPot = 0               # default intensity pot data to 0
+hPot = MCP3008(channel=0)   # default hue pot data to 0
+iPot = MCP3008(channel=1)   # default intensity pot data to 0
 connected = hollaBroker()   # is broker found
 
 def applyPots():
-    hPot = adc.mcp3008(0)
-    iPot = adc.mcp3008(1)
-    global last_hPot, last_iPot
+    global hPot, iPot
+    tempH = hPot.value
+    tempI = iPot.value
     sat =  0.0
-    if (hPot >= 1020):
+    if (tempH > 1020):
         sat = 0.0
     else:
         sat = 1.0
-    if (abs(hPot - last_hPot) > 4 or abs(iPot - last_iPot) > 4):
-        # print('h_diff =', hPot , '-', last_hPot, '\ni_diff =', iPot, '-', last_iPot)
-        temp = hsv_to_rgb(hPot / 1023.0, sat, iPot / 1023.0)
-        client.publish(topic, repr(round(temp[0] * 255)) + "," + repr(round(temp[1] * 255)) + "," + repr(round(temp[2] * 255)))
-        last_hPot = hPot
-        last_iPot = iPot
-        del temp
+    print('h =', tempH , '\ni =', tempI)
+    tempC = hsv_to_rgb(tempH / 1023.0, sat, tempI / 1023.0)
+    client.publish(topic, repr(round(temp[0] * 255)) + "," + repr(round(temp[1] * 255)) + "," + repr(round(temp[2] * 255)))
+    del tempC, tempH, tempI
 
 while connected:
     try:
