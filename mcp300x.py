@@ -15,7 +15,7 @@ class ADC:
         # check proper range for analog channel (0 or 1 on MCP3002)
         channel = max(0, min(1, channel))
         # gather data after sending data. *see spi_xfer(args) and MCP3002 datasheet
-        self.result = self.pi.spi_xfer(self.adc, [1, (2 + channel) << 6, 0])
+        self.result = self.pi.spi_xfer2(self.adc, [1, (2 + channel) << 6, 0])
         if debug: self.printRawResult(self.result)
         # return data from chip
         return ((self.result[1][1] & 3) << 8) + self.result[1][2]
@@ -25,7 +25,7 @@ class ADC:
         # check proper range for analog channel (0 to 3 on MCP3004)
         channel = max(0, min(3, channel))
         # gather data after sending data. *see spi_xfer(args) and MCP3004 datasheet
-        self.result = self.pi.spi_xfer(self.adc, [1, (8 + channel) << 4, 0])
+        self.result = self.pi.spi_xfer2(self.adc, [1, (8 + channel) << 4, 0])
         if debug: self.printRawResult(self.result)
         # return data from chip
         return ((self.result[1][1] & 3) << 8) + self.result[1][2]
@@ -35,7 +35,7 @@ class ADC:
         # check proper range for analog channel (0 to 7 on MCP3008)
         channel = max(0, min(7, channel))
         # gather data after sending data. *see spi_xfer(args) and MCP3008 datasheet
-        self.result = self.pi.spi_xfer(self.adc, [1, (8 + channel) << 4, 0])
+        self.result = self.pi.spi_xfer2(self.adc, [1, (8 + channel) << 4, 0])
         if debug: self.printRawResult(self.result)
         # return data from chip
         return ((self.result[1][1] & 3) << 8) + self.result[1][2]
@@ -48,7 +48,7 @@ class ADC:
         print(r[0], 'bytes =')
         for i in range(r[0]):
             print(bin(r[1][i]), end = ' ')
-        println() # finish debug output with '\n'
+        print() # finish debug output with '\n'
 
     def __del__(self):
         self.pi.spi_close(self.adc)
