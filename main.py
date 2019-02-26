@@ -90,7 +90,7 @@ def applyPots():
         sat = 1.0
     print('h =', tempH , '\ni =', tempI)
     tempC = hsv_to_rgb(tempH / 1023.0, sat, tempI / 1023.0)
-    client.publish(topic, repr(round(temp[0] * 255)) + "," + repr(round(temp[1] * 255)) + "," + repr(round(temp[2] * 255)))
+    client.publish(topic, repr(round(tempC[0] * 255)) + "," + repr(round(tempC[1] * 255)) + "," + repr(round(tempC[2] * 255)))
     del tempC, tempH, tempI
 
 while connected:
