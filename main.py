@@ -91,7 +91,7 @@ def applyPots(hue, val):
     del tempC
 
 while connected:
-    global hPot, iPot
+    # global hPot, iPot
     try:
         sec = time.time()
         if (floor(sec) % 2 == 0):
