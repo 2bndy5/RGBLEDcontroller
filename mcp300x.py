@@ -16,7 +16,7 @@ class ADC:
         channel = max(0, min(1, channel))
         # gather data after sending data. *see spi_xfer(args) and MCP3002 datasheet
         self.result = self.pi.spi_xfer(self.adc, [1, (2 + channel) << 6, 0])
-        if debug: printRawResult(self.result)
+        if debug: self.printRawResult(self.result)
         # return data from chip
         return ((self.result[1][1] & 3) << 8) + self.result[1][2]
     # end read mcp3002
@@ -26,7 +26,7 @@ class ADC:
         channel = max(0, min(3, channel))
         # gather data after sending data. *see spi_xfer(args) and MCP3004 datasheet
         self.result = self.pi.spi_xfer(self.adc, [1, (8 + channel) << 4, 0])
-        if debug: printRawResult(self.result)
+        if debug: self.printRawResult(self.result)
         # return data from chip
         return ((self.result[1][1] & 3) << 8) + self.result[1][2]
     # end mcp3008
@@ -36,7 +36,7 @@ class ADC:
         channel = max(0, min(7, channel))
         # gather data after sending data. *see spi_xfer(args) and MCP3008 datasheet
         self.result = self.pi.spi_xfer(self.adc, [1, (8 + channel) << 4, 0])
-        if debug: printRawResult(self.result)
+        if debug: self.printRawResult(self.result)
         # return data from chip
         return ((self.result[1][1] & 3) << 8) + self.result[1][2]
     # end mcp3008
@@ -53,7 +53,7 @@ class ADC:
     def __del__(self):
         self.pi.spi_close(self.adc)
         self.pi.stop()
-        del pi
+        del self.pi
 # end class ADC
 
 # for testing. Adjust to suit your IC model (e.g. mcp3008 vs mcp3002)
