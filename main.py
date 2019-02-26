@@ -80,7 +80,6 @@ iPot = MCP3008(channel=1)   # create intensity pot object
 connected = hollaBroker()   # is broker found
 
 def applyPots(hue, val):
-    # global hPot, iPot
     sat =  0.0
     if (hue > 1020):
         sat = 0.0
@@ -92,6 +91,7 @@ def applyPots(hue, val):
     del tempC
 
 while connected:
+    global hPot, iPot
     try:
         sec = time.time()
         if (floor(sec) % 2 == 0):
