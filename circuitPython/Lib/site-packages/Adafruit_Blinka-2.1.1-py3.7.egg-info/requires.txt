@@ -1,0 +1,12 @@
+Adafruit-PlatformDetect
+Adafruit-PureIO
+
+[:platform_machine == "armv7l" or platform_machine == "armv6l"]
+RPi.GPIO
+rpi_ws281x>=4.0.0
+
+[:platform_system != "Windows"]
+sysv_ipc
+
+[:sys_platform == "linux"]
+spidev

@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\VisualChimes"
   ],
-  "SelectedNode": "\\colour.py",
+  "SelectedNode": "\\VisualChimes\\capacitiveChimes.py",
   "PreviewInSolutionExplorer": false
 }
