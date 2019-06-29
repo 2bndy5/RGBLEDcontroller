@@ -53,8 +53,6 @@ edges = 0; held = 0
 # iterate existing queued fx jobs, then add new jobs to queue, then draw LEDs
 prevTouch = touch
 
-ripple = Ripple(0, num_pixels)
-
 def go2norm(i):
 	if ((not effect.royGbiv and (hsi[i][0] >= 300/360.0)) or effect.royGbiv):
 		c = int(hsi[i][2] * 255)
