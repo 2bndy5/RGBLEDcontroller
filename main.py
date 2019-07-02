@@ -18,28 +18,23 @@ offTime = 0
 def hollaBroker():
     try:
         client.connect(broker)
-    except TimeoutError as t_err:
-        print("**connection attempt with broker timed out!")
-        return False
-    finally:
+        # List of string and integer tuples: subscribe([("my/topic", 0), ("another/topic", 2)])
         client.subscribe(topic, qos=2)
         print("**Connected to", broker, "and subscribed to", topic)
         return True
+    except TimeoutError:
+        print("**connection attempt with broker timed out!")
+        return False
 
-def on_message(client, userdata, message):
-    msg = str(message.payload.decode("utf-8"))
-    # print("message received " , msg)
-    # print("message topic=",message.topic)
-    # print("message qos=",message.qos)
-    # print("message retain flag=",message.retain)
+def parseColor(msg):
     red = 0
     green = 0
     blue = 0
     if (msg.find("#") == 0):    # using html hexadecimal notation
         if (len(msg) == 4):     # using shorthand hex '#fff'
-            red = int(msg[1] + msg[1], 16)
-            green = int(msg[2] + msg[2], 16)
-            blue = int(msg[3] + msg[3], 16)
+            red = int((msg[1] << 4) + msg[1], 16)
+            green = int((msg[2] << 4) + msg[2], 16)
+            blue = int((msg[3] << 4) + msg[3], 16)
         else:                   # using standard hex '#ffffff'
             red = int(msg[1] + msg[2], 16)
             green = int(msg[3] + msg[4], 16)
@@ -60,18 +55,27 @@ def on_message(client, userdata, message):
         del e1, e2
         # now get actual RGB from HSV values using colorsys function
         newC = hsv_to_rgb(red, green, blue)
-        red = newC[0] * 255.0
-        green = newC[1] * 255.0
-        blue = newC[2] * 255.0
+        red = newC[0] * 255
+        green = newC[1] * 255
+        blue = newC[2] * 255
         del newC
 
     # print(red, green, blue, sep=",")
     red = float(red / 255.0)
     green = float(green / 255.0)
     blue = float(blue / 255.0)
-    global rgb              # needed to merge data into stream
-    rgb = (red, green, blue)
-    del red, green, blue
+    return (red, green, blue)
+        
+def on_message(client, userdata, message):
+    t = str(message.topic.decode("utf-8"))
+    msg = str(message.payload.decode("utf-8"))
+    # print("message topic=",message.topic)
+    # print("message qos=",message.qos)
+    # print("message received=", msg)
+    # print("message retain flag=",message.retain)
+    if t == topic:
+        global rgb              # needed to merge data into stream
+        rgb = parseColor(msg)
     
 client.on_message = on_message
 
@@ -100,7 +104,7 @@ def applyPots():
 
 while connected:
     try:
-        sec = time.time()
+        sec = time.monotonic()
         if (floor(sec) % 2 == 0):
             client.loop_start()
             isListening = True
