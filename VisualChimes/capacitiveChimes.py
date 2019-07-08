@@ -1,8 +1,7 @@
 # Import MPR121 module.
-import time, board, neopixel, busio, geocoder, adafruit_mpr121, paho.mqtt.client as mqtt, netifaces, socket
+import time, board, neopixel, busio, adafruit_mpr121, paho.mqtt.client as mqtt, netifaces, socket
 from colorsys import hsv_to_rgb as hsi2rgb, rgb_to_hsv as rgb2hsi
 from .Ripple import *
-from skyfield import api
 # Create I2C bus.
 i2c = busio.I2C(board.SCL, board.SDA)
 # Create MPR121 object.
